@@ -83,7 +83,7 @@ namespace autoEcoleEF
                 catch (Exception ex)
                 {
                     //MessageBox.Show(ex.Message);
-                    MessageBox.Show("Erreur lors de la suppression");
+                    MessageBox.Show($"Erreur lors de la suppression {ex.Message}");
                 }
             }
         }

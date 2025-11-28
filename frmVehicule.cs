@@ -13,12 +13,12 @@ namespace autoEcoleEF
 {
     public partial class frmVehicule : Form
     {
-        private autoecoleEntities mesDonnees;
-        public frmVehicule(autoecoleEntities mesDonnees)
+        private autoecoleEntities mesDonneesEF;
+        public frmVehicule(autoecoleEntities mesDonneesEF)
         {
             InitializeComponent();
-            this.mesDonnees = mesDonnees;
-            this.bdgSourceVehicule.DataSource = mesDonnees.vehicules.ToList();
+            this.mesDonneesEF = mesDonneesEF;
+            this.bdgSourceVehicule.DataSource = mesDonneesEF.vehicules.ToList();
         }
 
         private void frmVehicule_Load(object sender, EventArgs e)
@@ -53,6 +53,34 @@ namespace autoEcoleEF
             txtCouleurVéhicule.ReadOnly = false;
             txtModeleVehicule.ReadOnly = false;
             txtNumVehicule.ReadOnly=false;
+        }
+
+        private vehicule NewVehicule()
+        {
+            vehicule nVehicule = new vehicule();
+            nVehicule.modele = txtModeleVehicule.Text;
+            nVehicule.couleur = txtCouleurVéhicule.Text;
+            nVehicule.enEtat = (short)(radioEnFonction.Checked ? 1 : 0);
+
+            return nVehicule;
+        }
+
+        private void toolStripButton1_Click(object sender, EventArgs e)
+        {
+            this.bdgSourceVehicule.EndEdit();
+            try{
+                this.mesDonneesEF.vehicules.Add(NewVehicule());
+                this.mesDonneesEF.SaveChanges();
+                MessageBox.Show("Vehicule enregistré avec succés");
+            }catch(Exception ex){
+                MessageBox.Show($"Erreur lors de l'enregistrement ! {ex.Message}");
+            }
+        }
+
+        private void bindingNavigatorDeleteItem_Click(object sender, EventArgs e)
+        {
+            var acutelVehicule = (vehicule)bdgSourceVehicule.Current;
+
         }
     }
 }
